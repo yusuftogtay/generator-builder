@@ -1,5 +1,5 @@
 {
-    "name": "infyomlabs/generator-builder",
+    "name": "yusuftogtay/generator-builder",
     "type": "library",
     "description": "InfyOm Laravel Generator GUI Builder",
     "keywords": [
@@ -13,12 +13,10 @@
         "gui"
     ],
     "license": "MIT",
-    "authors": [
-        {
-            "name": "Mitul Golakiya",
-            "email": "me@mitul.me"
-        }
-    ],
+    "authors": [{
+        "name": "Mitul Golakiya",
+        "email": "me@mitul.me"
+    }],
     "require": {
         "php": ">=5.5.9",
         "illuminate/support": ">=5.0"
@@ -35,10 +33,8 @@
             ]
         }
     },
-    "funding": [
-        {
-            "type": "opencollective",
-            "url": "https://opencollective.com/infyomlabs"
-        }
-    ]
+    "funding": [{
+        "type": "opencollective",
+        "url": "https://opencollective.com/infyomlabs"
+    }]
 }
