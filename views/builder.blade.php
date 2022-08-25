@@ -94,6 +94,12 @@
                                             class="chk-label-margin">Localized</span>
                                     </label>
                                 </div>
+                                <div class="checkbox chk-align" id="chForceMigrate">
+                                    <label>
+                                        <input type="checkbox" class="flat-red" id="chContentLocalized"> <span
+                                            class="chk-label-margin">Content Localized</span>
+                                    </label>
+                                </div>
                                 <div class="checkbox chk-align" id="chTest">
                                     <label>
                                         <input type="checkbox" class="flat-red" id="chkTestCases"> <span
