@@ -4,13 +4,19 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>InfyOm Technologies</title>
+    <title>{{ config('app.name') }}</title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.3.2/css/AdminLTE.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/iCheck/1.0.2/skins/all.css">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/iCheck/1.0.2/skins/square/_all.css">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="{{ asset('plugins/iCheck/flat/blue.css') }}">
 </head>
 <style>
     .chk-align {
@@ -34,6 +40,15 @@
         background-color: #2489C5 !important;
     }
 
+    .expanded-row {
+        display: table-row;
+        /* Satırı yeniden görünür yapar */
+    }
+
+    .expanded-content {
+        display: block;
+        /* İçeriği blok düzenlemesi yapar */
+    }
 </style>
 
 <body class="skin-blue" style="background-color: #ecf0f5">
@@ -42,210 +57,288 @@
             <div id="info" style="display: none"></div>
             <div class="box box-primary col-lg-12">
                 <div class="box-header" style="margin-top: 10px">
-                    <h1 class="box-title" style="font-size: 30px">InfyOm Laravel Generator Builder</h1>
+                    <h1 class="box-title" style="font-size: 30px">{{ config('app.name') }}</h1>
                 </div>
                 <div class="box-body">
-                    <form id="form">
-                        <input type="hidden" name="_token" id="token" value="{!! csrf_token() !!}" />
-
-                        <div class="form-group col-md-4">
-                            <label for="txtModelName">Model Name<span class="required">*</span></label>
-                            <input type="text" class="form-control" required id="txtModelName"
-                                placeholder="Enter name">
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label for="drdCommandType">Command Type</label>
-                            <select id="drdCommandType" class="form-control" style="width: 100%">
-                                <option value="infyom:api_scaffold">API Scaffold Generator</option>
-                                <option value="infyom:api">API Generator</option>
-                                <option value="infyom:scaffold">Scaffold Generator</option>
-                            </select>
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label for="txtCustomTblName">Custom Table Name</label>
-                            <input type="text" class="form-control" id="txtCustomTblName"
-                                placeholder="Enter table name">
-                        </div>
-                        <div class="form-group col-md-8">
-                            <label for="txtModelName">Options</label>
-
-                            <div class="form-inline form-group" style="border-color: transparent">
-                                <div class="checkbox chk-align">
-                                    <label>
-                                        <input type="checkbox" class="flat-red" id="chkDelete"><span
-                                            class="chk-label-margin"> Soft Delete </span>
-                                    </label>
-                                </div>
-                                <div class="checkbox chk-align">
-                                    <label>
-                                        <input type="checkbox" class="flat-red" id="chkSave"> <span
-                                            class="chk-label-margin">Save Schema</span>
-                                    </label>
-                                </div>
-                                <div class="checkbox chk-align" id="chSwag">
-                                    <label>
-                                        <input type="checkbox" class="flat-red" id="chkSwagger"> <span
-                                            class="chk-label-margin">Swagger</span>
-                                    </label>
-                                </div>
-                                <div class="checkbox chk-align" id="chLocalized">
-                                    <label>
-                                        <input type="checkbox" class="flat-red" id="chkLocalized"> <span
-                                            class="chk-label-margin">Localized</span>
-                                    </label>
-                                </div>
-                                <div class="checkbox chk-align" id="chTest">
-                                    <label>
-                                        <input type="checkbox" class="flat-red" id="chkTestCases"> <span
-                                            class="chk-label-margin">Test Cases</span>
-                                    </label>
-                                </div>
-                                <div class="checkbox chk-align" id="chDataTable">
-                                    <label>
-                                        <input type="checkbox" class="flat-red" id="chkDataTable"> <span
-                                            class="chk-label-margin">Datatables</span>
-                                    </label>
-                                </div>
-                                <div class="checkbox chk-align" id="chMigration">
-                                    <label>
-                                        <input type="checkbox" class="flat-red" id="chkMigration"> <span
-                                            class="chk-label-margin">Migration</span>
-                                    </label>
-                                </div>
-                                <div class="checkbox chk-align" id="chForceMigrate">
-                                    <label>
-                                        <input type="checkbox" class="flat-red" id="chkForceMigrate"> <span
-                                            class="chk-label-margin">Force Migrate</span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group col-md-3">
-                            <label for="txtPrefix">Prefix</label>
-                            <input type="text" class="form-control" id="txtPrefix" placeholder="Enter prefix">
-                        </div>
-
-                        <div class="form-group col-md-1">
-                            <label for="txtPaginate">Paginate</label>
-                            <input type="number" class="form-control" value="10" id="txtPaginate" placeholder="">
-                        </div>
-
-                        <div class="form-group col-md-12" style="margin-top: 7px">
-                            <div class="form-control" style="border-color: transparent;padding-left: 0px">
-                                <label style="font-size: 18px">Fields</label>
-                            </div>
-                        </div>
-
-                        <div class="table-responsive col-md-12">
-                            <table class="table table-striped table-bordered" id="table">
-                                <thead class="no-border">
-                                    <tr>
-                                        <th>Field Name</th>
-                                        <th>DB Type</th>
-                                        <th>Validations</th>
-                                        <th>Html Type</th>
-                                        <th style="width: 68px">Primary</th>
-                                        <th style="width: 80px">Is Foreign</th>
-                                        <th style="width: 87px">Searchable</th>
-                                        <th style="width: 63px">Fillable</th>
-                                        <th style="width: 65px">In Form</th>
-                                        <th style="width: 67px">In Index</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody id="container" class="no-border-x no-border-y ui-sortable">
-
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div class="form-inline col-md-12" style="padding-top: 10px">
-                            <div class="form-group chk-align" style="border-color: transparent;">
-                                <button type="button" class="btn btn-success btn-flat btn-green" id="btnAdd"> Add Field
-                                </button>
-                            </div>
-                            <div class="form-group chk-align" style="border-color: transparent;">
-                                <button type="button" class="btn btn-success btn-flat btn-green" id="btnPrimary"> Add
-                                    Primary
-                                </button>
-                            </div>
-                            <div class="form-group chk-align" style="border-color: transparent;">
-                                <button type="button" class="btn btn-success btn-flat btn-green" id="btnTimeStamps"> Add
-                                    Timestamps
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="table-responsive col-md-12" id="relationShip" style="margin-top:35px;display: none">
-                            <table class="table table-striped table-bordered" id="table">
-                                <thead class="no-border">
-                                    <tr>
-                                        <th>Relation Type</th>
-                                        <th>Foreign Model<span class="required">*</span></th>
-                                        <th>Foreign Key</th>
-                                        <th>Local Key</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody id="rsContainer" class="no-border-x no-border-y ui-sortable">
-
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="form-inline col-md-12" style="padding-top: 10px">
-                            <div class="form-group" style="border-color: transparent;">
-                                <button type="button" class="btn btn-success btn-flat btn-green" id="btnRelationShip">
-                                    Add
-                                    RelationShip
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="form-inline col-md-12" style="padding:15px 15px;text-align: right">
-                            <div class="form-group" style="border-color: transparent;padding-left: 10px">
-                                <button type="submit" class="btn btn-flat btn-primary btn-blue"
-                                    id="btnGenerate">Generate
-                                </button>
-                            </div>
-                            <div class="form-group" style="border-color: transparent;padding-left: 10px">
-                                <button type="button" class="btn btn-default btn-flat" id="btnReset" data-toggle="modal"
-                                    data-target="#confirm-delete"> Reset
-                                </button>
-                            </div>
-                        </div>
-
-
-                        <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog"
-                            aria-labelledby="myModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal"
-                                            aria-hidden="true">&times;</button>
-                                        <h4 class="modal-title" id="myModalLabel">Confirm Reset</h4>
+                    <div
+                        class="form-group col-12 d-flex flex-column flex-md-row justify-content-md-end justify-content-sm-center border-top pt-4">
+                        <form id="form">
+                            <input type="hidden" name="_token" id="token" value="{!! csrf_token() !!}" />
+                            <div class="d-flex flex-column col-sm-12 col-md-6">
+                                <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
+                                    <label class="col-md-3 control-label text-md-right mx-1"
+                                        for="txtModelName">{{ __('generatorBuilder.model_name') }}<span
+                                            class="required">*</span></label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" required id="txtModelName"
+                                            placeholder='{{ __('generatorBuilder.model_name_place_holder') }}'>
+                                        <div class="form-text text-muted">
+                                            {{ __('generatorBuilder.model_name_helper') }}
+                                        </div>
                                     </div>
-
-                                    <div class="modal-body">
-                                        <p style="font-size: 16px">This will reset all of your fields. Do you want to
-                                            proceed?</p>
-
-                                        <p class="debug-url"></p>
+                                </div>
+                                <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
+                                    <label class="col-md-3 control-label text-md-right mx-1"
+                                        for="drdCommandType">{{ __('generatorBuilder.generation_type') }}</label>
+                                    <div class="col-md-9">
+                                        @include('generator-builder::components.commandTypeSelect')
+                                        <div class="form-text text-muted">
+                                            {{ __('generatorBuilder.generation_type_helper') }}
+                                        </div>
                                     </div>
-
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-flat btn-default" data-dismiss="modal">No
-                                        </button>
-                                        <a id="btnModelReset" class="btn btn-flat btn-danger btn-ok"
-                                            data-dismiss="modal">Yes</a>
+                                </div>
+                                <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
+                                    <label class="col-md-3 control-label text-md-right mx-1"
+                                        for="txtCustomTblName">{{ __('generatorBuilder.table_name') }}</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" id="txtCustomTblName"
+                                            placeholder="{{ __('generatorBuilder.table_name_helper') }}">
+                                        <div class="form-text text-muted">
+                                            {{ __('generatorBuilder.table_name_helper') }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
+                                    <label class="col-md-3 control-label text-md-right mx-1"
+                                        for="txtPrefix">{{ __('generatorBuilder.prefix') }}</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" id="txtPrefix"
+                                            placeholder="{{ __('generatorBuilder.prefix_place_holder') }}">
+                                        <div class="form-text text-muted">
+                                            {{ __('generatorBuilder.prefix_helper') }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
+                                    <label class="col-md-3 control-label text-md-right mx-1"
+                                        for="txtPaginate">{{ __('generatorBuilder.paginate') }}</label>
+                                    <div class="col-md-9">
+                                        <input type="number" class="form-control" value="10" id="txtPaginate"
+                                            placeholder="">
+                                        <div class="form-text text-muted">
+                                            {{ __('generatorBuilder.paginate_helper') }}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                            <div class="d-flex flex-column col-sm-12 col-md-6">
+                                <label for="txtModelName">{{ __('generatorBuilder.options.title') }}</label>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group" style="border-color: transparent">
+                                            <div class="checkbox chk-align">
+                                                <label>
+                                                    <input type="checkbox" class="flat-red" id="chkDelete"><span
+                                                        class="chk-label-margin">
+                                                        {{ __('generatorBuilder.options.soft_delete') }} </span>
+                                                </label>
+                                            </div>
+                                            <div class="checkbox chk-align">
+                                                <label>
+                                                    <input type="checkbox" class="flat-red" id="chkSave"> <span
+                                                        class="chk-label-margin">{{ __('generatorBuilder.options.save_schema') }}</span>
+                                                </label>
+                                            </div>
+                                            <div class="checkbox chk-align" id="chSwag">
+                                                <label>
+                                                    <input type="checkbox" class="flat-red" id="chkSwagger"> <span
+                                                        class="chk-label-margin">{{ __('generatorBuilder.options.swagger') }}</span>
+                                                </label>
+                                            </div>
+                                            <div class="checkbox chk-align" id="chLocalized">
+                                                <label>
+                                                    <input type="checkbox" class="flat-red" id="chkLocalized"> <span
+                                                        class="chk-label-margin">{{ __('generatorBuilder.options.localized') }}</span>
+                                                </label>
+                                            </div>
+                                            <div class="checkbox chk-align" id="chTest">
+                                                <label>
+                                                    <input type="checkbox" class="flat-red" id="chkTestCases"> <span
+                                                        class="chk-label-margin">{{ __('generatorBuilder.options.test_cases') }}</span>
+                                                </label>
+                                            </div>
+                                            <div class="checkbox chk-align" id="chDataTable">
+                                                <label>
+                                                    <input type="checkbox" class="flat-red" id="chkDataTable"> <span
+                                                        class="chk-label-margin">{{ __('generatorBuilder.options.datatables') }}</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group" style="border-color: transparent">
+                                            <div class="checkbox chk-align" id="chMigration">
+                                                <label>
+                                                    <input type="checkbox" class="flat-red" id="chkMigration"> <span
+                                                        class="chk-label-margin">{{ __('generatorBuilder.options.migration') }}</span>
+                                                </label>
+                                            </div>
+                                            <div class="checkbox chk-align" id="chForceMigrate">
+                                                <label>
+                                                    <input type="checkbox" class="flat-red" id="chkForceMigrate">
+                                                    <span
+                                                        class="chk-label-margin">{{ __('generatorBuilder.options.force_migrate') }}</span>
+                                                </label>
+                                            </div>
+                                            <div class="checkbox chk-align" id="chActivtyLog">
+                                                <label>
+                                                    <input type="checkbox" class="flat-red" id="chkActivityLog">
+                                                    <span
+                                                        class="chk-label-margin">{{ __('generatorBuilder.options.activity_log') }}</span>
+                                                </label>
+                                            </div>
+                                            <div class="checkbox chk-align" id="chMedia">
+                                                <label>
+                                                    <input type="checkbox" class="flat-red" id="chkMedia"> <span
+                                                        class="chk-label-margin">{{ __('generatorBuilder.options.media') }}</span>
+                                                </label>
+                                            </div>
+                                            <div class="checkbox chk-align" id="chFactory">
+                                                <label>
+                                                    <input type="checkbox" class="flat-red" id="chkFactory"> <span
+                                                        class="chk-label-margin">{{ __('generatorBuilder.options.factory') }}</span>
+                                                </label>
+                                            </div>
+                                            <div class="checkbox chk-align" id="chLadaCache">
+                                                <label>
+                                                    <input type="checkbox" class="flat-red" id="chkLadaCache"> <span
+                                                        class="chk-label-margin">{{ __('generatorBuilder.options.lada_cache') }}</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-12" style="margin-top: 7px">
+                                <div class="form-control" style="border-color: transparent;padding-left: 0px">
+                                    <label
+                                        style="font-size: 18px">{{ __('generatorBuilder.fields_title') }}</label>
+                                </div>
+                            </div>
+                            <div class="table-responsive col-md-12">
+                                <table class="table table-striped table-bordered" id="table">
+                                    <thead class="no-border">
+                                        <tr>
+                                            <th>{{ __('generatorBuilder.field_name') }}</th>
+                                            <th>{{ __('generatorBuilder.db_type') }}</th>
+                                            <th>{{ __('generatorBuilder.html_type') }}</th>
+                                            <th style="width: 68px">{{ __('generatorBuilder.primary') }}
+                                            </th>
+                                            <th style="width: 80px">{{ __('generatorBuilder.is_foreign') }}
+                                            </th>
+                                            <th style="width: 87px">{{ __('generatorBuilder.searchable') }}
+                                            </th>
+                                            <th style="width: 63px">{{ __('generatorBuilder.fillable') }}
+                                            </th>
+                                            <th style="width: 65px">{{ __('generatorBuilder.in_form') }}
+                                            </th>
+                                            <th style="width: 67px">{{ __('generatorBuilder.in_index') }}
+                                            </th>
+                                            <th>{{ __('generatorBuilder.actions') }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="container" class="no-border-x no-border-y ui-sortable">
 
-                    </form>
+                                    </tbody>
+                                </table>
+                            </div>
 
+                            <div class="form-inline col-md-12" style="padding-top: 10px">
+                                <div class="form-group chk-align" style="border-color: transparent;">
+                                    <button type="button" class="btn btn-success btn-flat btn-green" id="btnAdd">
+                                        Add
+                                        Field
+                                    </button>
+                                </div>
+                                <div class="form-group chk-align" style="border-color: transparent;">
+                                    <button type="button" class="btn btn-success btn-flat btn-green"
+                                        id="btnPrimary">
+                                        Add
+                                        Primary
+                                    </button>
+                                </div>
+                                <div class="form-group chk-align" style="border-color: transparent;">
+                                    <button type="button" class="btn btn-success btn-flat btn-green"
+                                        id="btnTimeStamps">
+                                        Add
+                                        Timestamps
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="table-responsive col-md-12" id="relationShip"
+                                style="margin-top:35px;display: none">
+                                <table class="table table-striped table-bordered" id="table">
+                                    <thead class="no-border">
+                                        <tr>
+                                            <th>Relation Type</th>
+                                            <th>Foreign Model<span class="required">*</span></th>
+                                            <th>Foreign Key</th>
+                                            <th>Local Key</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="rsContainer" class="no-border-x no-border-y ui-sortable">
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="form-inline col-md-12" style="padding-top: 10px">
+                                <div class="form-group" style="border-color: transparent;">
+                                    <button type="button" class="btn btn-success btn-flat btn-green"
+                                        id="btnRelationShip">
+                                        Add
+                                        RelationShip
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="form-inline col-md-12" style="padding:15px 15px;text-align: right">
+                                <div class="form-group" style="border-color: transparent;padding-left: 10px">
+                                    <button type="submit" class="btn btn-flat btn-primary btn-blue"
+                                        id="btnGenerate">Generate
+                                    </button>
+                                </div>
+                                <div class="form-group" style="border-color: transparent;padding-left: 10px">
+                                    <button type="button" class="btn btn-default btn-flat" id="btnReset"
+                                        data-toggle="modal" data-target="#confirm-delete"> Reset
+                                    </button>
+                                </div>
+                            </div>
+
+
+                            <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog"
+                                aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                aria-hidden="true">&times;</button>
+                                            <h4 class="modal-title" id="myModalLabel">Confirm Reset</h4>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <p style="font-size: 16px">This will reset all of your fields. Do you want
+                                                to
+                                                proceed?</p>
+
+                                            <p class="debug-url"></p>
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-flat btn-default"
+                                                data-dismiss="modal">No
+                                            </button>
+                                            <a id="btnModelReset" class="btn btn-flat btn-danger btn-ok"
+                                                data-dismiss="modal">Yes</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
                 </div>
             </div>
         </section>
@@ -335,8 +428,15 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/iCheck/1.0.2/icheck.min.js"></script>
+<!-- AdminLTE App -->
+<script src="{{asset('dist/js/adminlte.js')}}"></script>
+<script src="{{asset('dist/js/demo.js')}}"></script>
+
+<script src="{{asset('js/main.js')}}"></script>
 
 <script>
+    var field_cell_counter = 0;
+
     $("select").select2({
         width: '100%'
     });
@@ -368,7 +468,8 @@
         });
 
         $(document).ready(function() {
-            var htmlStr = '<tr class="item" style="display: table-row;"></tr>';
+            var htmlStr = '<tr class="item" id="field' + field_cell_counter +
+                '" style="display: table-row;"></tr>';
             var commonComponent = $(htmlStr).filter("tr").load('{{ route('io_field_template') }}');
             var relationStr = '<tr class="relationItem" style="display: table-row;"></tr>';
             var relationComponent = $(relationStr).filter("tr").load(
@@ -378,6 +479,7 @@
                 var item = $(commonComponent).clone();
                 initializeCheckbox(item);
                 $("#container").append(item);
+                field_cell_counter++
             });
 
             $("#btnTimeStamps").on("click", function() {
@@ -608,7 +710,7 @@
                     $("#schemaInfo").html("");
                     $("#schemaInfo").append(
                         '<div class="alert alert-danger"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Schema file must be json</strong></div>'
-                        );
+                    );
                     $("#schemaInfo").show();
                     $(this).replaceWith($(this).val('').clone(true));
                     setTimeout(function() {
@@ -745,6 +847,28 @@
 
     function removeItem(e) {
         e.parentNode.parentNode.parentNode.removeChild(e.parentNode.parentNode);
+    }
+
+    function expandRow(button) {
+        var row = button.parentNode.parentNode.parentNode; // Tıklanan butonun üst satırını alır
+        var expandedContent = document.createElement("div"); // Yeni bir <div> öğesi oluşturur
+        expandedContent.className = "expanded-content"; // <div> öğesine "expanded-content" sınıfını ekler
+        $(expandedContent).load(
+            '{{ route('io_field_template_detail') }}');; // İçeriği belirlemek için istediğiniz metni kullanabilirsiniz
+
+        if (row.nextSibling && row.nextSibling.className === "expanded-row") {
+            // Eğer satır zaten genişletilmişse, genişlemiş içeriği kaldırır
+            row.parentNode.removeChild(row.nextSibling);
+        } else {
+            // Eğer satır genişletilmemişse, yeni bir genişletilmiş satır ekler
+            var expandedRow = document.createElement("tr");
+            expandedRow.className = "expanded-row";
+            var expandedCell = document.createElement("td");
+            expandedCell.setAttribute("colspan", row.children.length);
+            expandedCell.appendChild(expandedContent);
+            expandedRow.appendChild(expandedCell);
+            row.parentNode.insertBefore(expandedRow, row.nextSibling);
+        }
     }
 </script>
 
