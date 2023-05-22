@@ -1,7 +1,23 @@
 <td style="vertical-align: middle">
-    <input type="text" style="width: 100%" required class="form-control txtFieldName"/>
-    <input type="text" class="form-control foreignTable txtForeignTable" style="display: none"
-           placeholder="Foreign table,Primary key"/>
+    <input type="text" style="width: 100%" required class="form-control txtFieldName" />
+    <div class="row foreignTable" style="display: none; padding-top: 1rem">
+        <div class="col-md-6">
+            <select class="form-control txtForeignModel" style="width: 100%" placeholder="Foreign Model">
+                <option selected disabled value="">{{ __('generatorBuilder.foreign_table_select') }}
+                </option>
+                @foreach ($models as $model)
+                    <option value="{{ $model->name }}">{{ $model->name }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-md-6">
+            <select disabled class="form-control txtForeignKey" style="width: 100%" placeholder="Foreign Model"
+                id="">
+                <option selected disabled value="">
+                    {{ __('generatorBuilder.foreign_key_place_holder') }}</option>
+            </select>
+        </div>
+    </div>
 </td>
 <td style="vertical-align: middle">
     <select class="form-control txtdbType" style="width: 100%">
@@ -26,72 +42,78 @@
         <option value="timestamp">Timestamp</option>
     </select>
 
-    <input type="text" class="form-control dbValue txtDbValue" style="display: none"
-           placeholder=""/>
+    <input type="text" class="form-control dbValue txtDbValue" style="display: none" placeholder="" />
 </td>
 <td style="vertical-align: middle">
-    <input type="text" class="form-control txtValidation"/>
-</td>
-<td style="vertical-align: middle">
-    <select class="form-control drdHtmlType" style="width: 100%">
-        <option value="text">Text</option>
-        <option value="email">Email</option>
-        <option value="number">Number</option>
-        <option value="date">Date</option>
-        <option value="file">File</option>
-        <option value="password">Password</option>
-        <option value="select">Select</option>
-        <option value="radio">Radio</option>
-        <option value="checkbox">Checkbox</option>
-        <option value="textarea">TextArea</option>
-        <option value="toggle-switch">Toggle</option>
-    </select>
-    <input type="text" class="form-control htmlValue txtHtmlValue" style="display: none"
-           placeholder=""/>
+    @include('generator-builder::components.htmlTypeSelect')
 </td>
 <td style="vertical-align: middle">
     <div class="checkbox" style="text-align: center">
         <label style="padding-left: 0px">
-            <input type="checkbox" style="margin-left: 0px!important;" class="flat-red chkPrimary"/>
+            <input type="checkbox" style="margin-left: 0px!important;" class="flat-red chkPrimary" />
         </label>
     </div>
 </td>
 <td style="vertical-align: middle">
     <div class="checkbox" style="text-align: center">
         <label style="padding-left: 0px">
-            <input type="checkbox" style="margin-left: 0px!important;" class="flat-red chkForeign"/>
+            <input type="checkbox" style="margin-left: 0px!important;" class="flat-red chkForeign" />
         </label>
     </div>
 </td>
 <td style="vertical-align: middle">
     <div class="checkbox" style="text-align: center">
         <label style="padding-left: 0px">
-            <input type="checkbox" style="margin-left: 0px!important;" class="flat-red chkSearchable" checked/>
+            <input type="checkbox" style="margin-left: 0px!important;" class="flat-red chkSearchable" checked />
         </label>
     </div>
 </td>
 <td style="vertical-align: middle">
     <div class="checkbox" style="text-align: center">
         <label style="padding-left: 0px">
-            <input type="checkbox" style="margin-left: 0px!important;" class="flat-red chkFillable" checked/>
+            <input type="checkbox" style="margin-left: 0px!important;" class="flat-red chkFillable" checked />
         </label>
     </div>
 </td>
 <td style="vertical-align: middle">
     <div class="checkbox" style="text-align: center">
         <label style="padding-left: 0px">
-            <input type="checkbox" style="margin-left: 0px!important;" class="flat-red chkInForm" checked/>
+            <input type="checkbox" style="margin-left: 0px!important;" class="flat-red chkInForm" checked />
         </label>
     </div>
 </td>
 <td style="vertical-align: middle">
     <div class="checkbox" style="text-align: center">
         <label style="padding-left: 0px">
-            <input type="checkbox" style="margin-left: 0px!important;" class="flat-red chkInIndex" checked/>
+            <input type="checkbox" style="margin-left: 0px!important;" class="flat-red chkInIndex" checked />
         </label>
     </div>
 </td>
 <td style="text-align: center;vertical-align: middle">
-    <i onclick="removeItem(this)" class="remove fa fa-trash-o"
-       style="cursor: pointer;font-size: 20px;color: red"></i>
+    <div class="btn-group">
+        <i onclick="removeItem(this)" class="remove fa-solid fa-trash"
+            style="cursor: pointer;font-size: 20px;color: red; padding-right: 1rem"></i>
+        <i onclick="expandRow(this)" class="fa-solid fa-pen-to-square" style="cursor: pointer;font-size: 20px; padding-right: 1rem"></i>
+    </div>
 </td>
+
+<script>
+    $(document).ready(function() {
+        $('.txtForeignModel').on('change', function() {
+            model = $('.txtForeignModel').val();
+            end_point = model.split("\\")
+            url = "getForeignKeys/" + end_point[end_point.length - 1];
+            $.get(url, function(data, status) {
+                if (status == 'success') {
+                    $('.txtForeignKey').empty();
+                    $.each(data, function(key, value) {
+                        $('.txtForeignKey').append('<option value="' + value + '">' +
+                            value +
+                            '</option>');
+                    });
+                    $('.txtForeignKey').removeAttr('disabled');
+                }
+            });
+        });
+    });
+</script>
